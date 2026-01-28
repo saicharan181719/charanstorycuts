@@ -7,7 +7,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 type PackageKey = "cinematic" | "rolling" | "combo" | "delivery";
 
-export default function BookingPage() {
+export default function BookingClient() {
   const router = useRouter();
   const sp = useSearchParams();
 
@@ -43,7 +43,6 @@ export default function BookingPage() {
   }, [pack]);
 
   useEffect(() => {
-    // Basic guard checks + auth check
     const user = auth.currentUser;
     if (!user) {
       router.replace("/login");
@@ -92,8 +91,8 @@ export default function BookingPage() {
         createdAt: serverTimestamp(),
 
         // Package
-        vehicle, // "bike" | "car"
-        pack, // cinematic | rolling | combo | delivery
+        vehicle,
+        pack,
         packageLabel,
         basePrice,
         finalPrice,
@@ -105,8 +104,8 @@ export default function BookingPage() {
         city: city.trim(),
         location: location.trim(),
         vehicleModel: vehicleModel.trim(),
-        date, // yyyy-mm-dd
-        time, // hh:mm
+        date,
+        time,
         notes: notes.trim(),
 
         // Status for next steps
@@ -114,7 +113,6 @@ export default function BookingPage() {
         bookingStatus: "new",
       });
 
-      // Go to checkout with bookingId
       router.push(`/checkout?bookingId=${docRef.id}`);
     } catch (e: any) {
       setError(e?.message || "Failed to save booking. Please try again.");
@@ -140,7 +138,6 @@ export default function BookingPage() {
           Fill this once. We’ll use it to confirm your shoot.
         </p>
 
-        {/* Summary */}
         <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-6">
           <div className="text-sm text-white/60">Selected package</div>
           <div className="mt-2 text-lg font-semibold">
@@ -167,7 +164,6 @@ export default function BookingPage() {
           </div>
         </div>
 
-        {/* Form */}
         <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -185,7 +181,9 @@ export default function BookingPage() {
               <input
                 className="mt-2 w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                onChange={(e) =>
+                  setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                }
                 placeholder="10-digit number"
               />
             </div>
@@ -206,12 +204,18 @@ export default function BookingPage() {
                 className="mt-2 w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
                 value={vehicleModel}
                 onChange={(e) => setVehicleModel(e.target.value)}
-                placeholder={vehicle === "car" ? "Creta / i20 / Swift..." : "R15 / Duke / RE..."}
+                placeholder={
+                  vehicle === "car"
+                    ? "Creta / i20 / Swift..."
+                    : "R15 / Duke / RE..."
+                }
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs text-white/60">Shoot Location / Area</label>
+              <label className="text-xs text-white/60">
+                Shoot Location / Area
+              </label>
               <input
                 className="mt-2 w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
                 value={location}
@@ -266,7 +270,8 @@ export default function BookingPage() {
           </button>
 
           <p className="mt-3 text-xs text-white/40">
-            Your booking details will be saved securely. Payment is the next step.
+            Your booking details will be saved securely. Payment is the next
+            step.
           </p>
         </div>
       </div>
