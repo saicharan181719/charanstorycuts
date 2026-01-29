@@ -9,7 +9,7 @@ export default function CheckoutPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-black text-white p-6">
-          Loading checkout…
+          Loading checkout...
         </div>
       }
     >
