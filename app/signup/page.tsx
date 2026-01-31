@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { motion } from "framer-motion";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -14,20 +18,27 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const loginEmail = async () => {
+  const signupEmail = async () => {
     setError("");
     setLoading(true);
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       router.push("/dashboard");
     } catch (err: any) {
-      setError("Invalid email or password");
+      setError(err?.message || "Failed to create account");
     } finally {
       setLoading(false);
     }
   };
 
-  const loginGoogle = async () => {
+  const signupGoogle = async () => {
     setError("");
     setLoading(true);
     try {
@@ -35,7 +46,7 @@ export default function LoginPage() {
       await signInWithPopup(auth, provider);
       router.push("/dashboard");
     } catch {
-      setError("Google login failed");
+      setError("Google signup failed");
     } finally {
       setLoading(false);
     }
@@ -63,16 +74,16 @@ export default function LoginPage() {
         >
           {/* Title */}
           <h1 className="text-2xl font-semibold text-center">
-            Login to <span className="text-white">charanstorycuts</span>
+            Create your <span className="text-white">charanstorycuts</span> account
           </h1>
 
           <p className="text-sm text-white/60 text-center mt-2">
-            Continue booking your shoot
+            Book your shoot in minutes
           </p>
 
-          {/* Google */}
+          {/* Google Signup */}
           <button
-            onClick={loginGoogle}
+            onClick={signupGoogle}
             className="mt-6 w-full bg-white text-black py-3 rounded-full font-medium hover:scale-[1.02] transition cursor-pointer"
           >
             Continue with Google
@@ -85,7 +96,7 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-white/10" />
           </div>
 
-          {/* Email */}
+          {/* Email & Password */}
           <div className="space-y-4">
             <input
               type="email"
@@ -111,23 +122,23 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Login Button */}
+          {/* Create Account Button */}
           <button
-            onClick={loginEmail}
+            onClick={signupEmail}
             disabled={loading}
             className="mt-6 w-full border border-white/20 py-3 rounded-full hover:bg-white hover:text-black transition cursor-pointer disabled:opacity-50"
           >
-            {loading ? "Logging in…" : "Login"}
+            {loading ? "Creating account…" : "Create account"}
           </button>
 
-          {/* Create Account */}
+          {/* Login Redirect */}
           <p className="mt-5 text-sm text-center text-white/60">
-            New to charanstorycuts?{" "}
+            Already have an account?{" "}
             <span
-              onClick={() => router.push("/signup")}
+              onClick={() => router.push("/login")}
               className="underline cursor-pointer hover:text-white"
             >
-              Create account
+              Login
             </span>
           </p>
 

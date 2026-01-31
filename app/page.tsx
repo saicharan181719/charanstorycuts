@@ -85,7 +85,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Bike Shoots */}
           <a
-            href="https://www.instagram.com/reel/DLdryP5THe4/"
+            href="https://www.instagram.com/reel/DO8zp3cDw8j/"
             target="_blank"
             className="group cursor-pointer relative rounded-2xl overflow-hidden border border-white/10"
           >
@@ -117,7 +117,7 @@ export default function HomePage() {
 
           {/* Cinematic Reels */}
           <a
-            href="https://www.instagram.com/charanstorycuts/"
+            href="https://www.instagram.com/reel/DT0dmolDwwQ/"
             target="_blank"
             className="group cursor-pointer relative rounded-2xl overflow-hidden border border-white/10"
           >
