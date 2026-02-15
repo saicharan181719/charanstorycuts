@@ -1,9 +1,12 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Charan Story Cuts",
+  title: "CharanStoryCuts",
   description: "Professional videography & editing",
 };
+
+import "./globals.css";
+import { LoadingProvider } from "@/app/components/LoadingProvider";
 
 export default function RootLayout({
   children,
@@ -12,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">{children}</body>
+      <body>
+        <LoadingProvider>
+          {children}
+        </LoadingProvider>
+      </body>
     </html>
   );
 }
+

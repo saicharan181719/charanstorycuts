@@ -18,14 +18,14 @@ const BIKE_PRICES: Record<PackageKey, number> = {
   cinematic: 499,
   rolling: 599,
   combo: 999,
-  delivery: 759, // New Bike Delivery
+  delivery: 759,
 };
 
 const CAR_PRICES: Record<PackageKey, number> = {
   cinematic: 699,
   rolling: 799,
   combo: 1299,
-  delivery: 1159, // New Car Delivery
+  delivery: 1159,
 };
 
 const TITLES: Record<PackageKey, string> = {
@@ -37,27 +37,27 @@ const TITLES: Record<PackageKey, string> = {
 
 const DETAILS: Record<PackageKey, string> = {
   cinematic:
-    "We will shoot cinematic shots with clean framing and smooth movements.",
+    "Clean cinematic framing with smooth camera movements and premium output.",
   rolling:
-    "We will shoot rolling shots with stable tracking and dynamic angles.",
+    "Dynamic rolling shots with stable tracking and professional motion.",
   combo:
-    "We will shoot both cinematic reels and rolling shots for a complete output.",
+    "Complete cinematic + rolling experience crafted for standout content.",
   delivery:
-    "Perfect for delivery shoots with a premium reveal style and highlights.",
+    "Premium delivery reveal with highlights and stylish presentation.",
 };
 
 function PackageIcon({ type }: { type: PackageKey }) {
-  if (type === "cinematic") return <CameraIcon className="w-5 h-5 text-white/80" />;
-  if (type === "rolling") return <RollIcon className="w-5 h-5 text-white/80" />;
-  if (type === "combo") return <ComboIcon className="w-5 h-5 text-white/80" />;
-  return <DeliveryIcon className="w-5 h-5 text-white/80" />;
+  const baseClass = "w-5 h-5";
+  if (type === "cinematic") return <CameraIcon className={baseClass} />;
+  if (type === "rolling") return <RollIcon className={baseClass} />;
+  if (type === "combo") return <ComboIcon className={baseClass} />;
+  return <DeliveryIcon className={baseClass} />;
 }
 
 export default function PackagesPage() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // ✅ Vehicle derived from URL (super reliable)
   const vehicle: Vehicle = useMemo(() => {
     const last = (pathname || "").split("/").filter(Boolean).pop();
     return last === "car" ? "car" : "bike";
@@ -70,7 +70,6 @@ export default function PackagesPage() {
   const [offerActive, setOfferActive] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Load offerUsed from Firestore
   useEffect(() => {
     const run = async () => {
       const user = auth.currentUser;
@@ -88,11 +87,6 @@ export default function PackagesPage() {
     run();
   }, [router]);
 
-  // ✅ reset selected package on vehicle switch (optional but good UX)
-  useEffect(() => {
-    setSelected("cinematic");
-  }, [vehicle]);
-
   const basePrice = prices[selected];
   const finalPrice = offerActive ? 9 : basePrice;
 
@@ -106,26 +100,39 @@ export default function PackagesPage() {
     }).toString();
 
     router.push(`/booking?${qs}`);
-
   };
 
   if (loading) return null;
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
-      <div className="max-w-4xl mx-auto">
+
+      {/* LOGO */}
+      <div className="absolute top-6 left-6">
+        <img
+          src="/charanstorycuts-logo.png"
+          alt="Logo"
+          className="h-8 cursor-pointer"
+          onClick={() => router.push("/dashboard")}
+        />
+      </div>
+
+      <div className="max-w-6xl mx-auto">
+
         <button
           onClick={() => router.push("/dashboard")}
-          className="text-sm text-white/70 hover:text-white transition"
+          className="text-sm text-white/60 hover:text-white transition mb-4"
         >
           ← Back
         </button>
 
-        <div className="mt-4 flex items-start justify-between gap-6">
+        <div className="flex items-start justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-semibold">{vehicleLabel} Packages</h1>
-            <p className="text-white/60 mt-2 text-sm">
-              All packages include editing.
+            <h1 className="text-3xl font-semibold">
+              {vehicleLabel} Packages
+            </h1>
+            <p className="text-white/50 mt-2 text-sm">
+              Premium packages. Clean execution. No compromises.
             </p>
           </div>
 
@@ -136,8 +143,8 @@ export default function PackagesPage() {
           )}
         </div>
 
-        {/* Package cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+        {/* PACKAGE BUTTONS */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10">
           {(["cinematic", "rolling", "combo", "delivery"] as PackageKey[]).map(
             (key) => {
               const active = selected === key;
@@ -148,29 +155,23 @@ export default function PackagesPage() {
                   key={key}
                   onClick={() => setSelected(key)}
                   className={[
-                    "rounded-2xl border p-5 text-left transition",
+                    "rounded-2xl p-6 text-left transition cursor-pointer",
                     active
-                      ? "border-white/40 bg-white/10"
-                      : "border-white/10 bg-white/5 hover:bg-white/10",
+                      ? "bg-white text-black shadow-lg"
+                      : "bg-white/10 text-white hover:bg-white/20",
                   ].join(" ")}
                 >
-                  {/* ✅ Icon + Title */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-semibold text-lg">
                     <PackageIcon type={key} />
-                    <div className="text-lg font-semibold">
-                      {key === "delivery"
-                        ? `New ${vehicleLabel} Delivery`
-                        : TITLES[key]}
-                    </div>
+                    {key === "delivery"
+                      ? `New ${vehicleLabel} Delivery`
+                      : TITLES[key]}
                   </div>
 
-                  <div className="mt-3 text-sm text-white/60">
-                    Price:{" "}
-                    <span className="text-white font-semibold">
-                      ₹{shownPrice}
-                    </span>
+                  <div className="mt-3 text-sm opacity-80">
+                    ₹{shownPrice}
                     {offerActive && (
-                      <span className="ml-2 line-through text-white/30">
+                      <span className="ml-2 line-through opacity-50">
                         ₹{prices[key]}
                       </span>
                     )}
@@ -181,36 +182,45 @@ export default function PackagesPage() {
           )}
         </div>
 
-        {/* Details */}
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6">
+        {/* DETAILS CARD */}
+        <div className="mt-12 rounded-2xl bg-white/5 border border-white/10 p-8">
           <div className="flex flex-col md:flex-row justify-between gap-6">
             <div>
-              <div className="flex items-center gap-2">
-                <PackageIcon type={selected} />
-                <h2 className="text-xl font-semibold">
-                  {selected === "delivery"
-                    ? `New ${vehicleLabel} Delivery`
-                    : TITLES[selected]}
-                </h2>
-              </div>
+              <h2 className="text-xl font-semibold mb-3">
+                {selected === "delivery"
+                  ? `New ${vehicleLabel} Delivery`
+                  : TITLES[selected]}
+              </h2>
 
-              <p className="mt-3 text-white/70">{DETAILS[selected]}</p>
+              <p className="text-white/70">{DETAILS[selected]}</p>
               <p className="mt-3 text-white/70">✅ Editing included</p>
             </div>
 
             <div className="text-right">
-              <div className="text-sm text-white/60">Total</div>
-              <div className="text-3xl font-semibold mt-1">₹{finalPrice}</div>
+              <div className="text-sm text-white/50">Total</div>
+              <div className="text-3xl font-semibold mt-1">
+                ₹{finalPrice}
+              </div>
 
               <button
                 onClick={proceed}
-                className="mt-4 bg-white text-black px-6 py-3 rounded-full font-medium hover:scale-105 transition"
+                className="mt-6 bg-white text-black px-8 py-3 rounded-full font-medium hover:scale-105 transition cursor-pointer"
               >
                 Proceed to Payment →
               </button>
             </div>
           </div>
         </div>
+
+        {/* PREMIUM ATTRACTIVE TEXT */}
+        <div className="mt-16 text-center">
+          <p className="text-white/60 italic text-sm max-w-2xl mx-auto">
+            Every frame we shoot carries intention. Every rupee you invest
+            returns in quality With <span className="text-white font-semibold">charanstorycuts</span> you’re not paying for a shoot — 
+            you’re investing in what world sees you!
+          </p>
+        </div>
+
       </div>
     </div>
   );

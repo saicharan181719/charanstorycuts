@@ -2,232 +2,129 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { BikeIcon, CarIcon } from "@/app/components/icons";
-
-const ADMIN_EMAIL = "charanstorycuts@gmail.com";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [offerActive, setOfferActive] = useState(false);
-
-  const isAdmin = (user?.email || "").toLowerCase() === ADMIN_EMAIL;
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (currentUser) => {
-      if (!currentUser) {
-        router.replace("/login");
-        return;
-      }
-
-      setUser(currentUser);
-
-      try {
-        const snap = await getDoc(doc(db, "users", currentUser.uid));
-        const offerUsed = snap.exists() ? !!snap.data().offerUsed : true;
-        setOfferActive(!offerUsed);
-      } catch {
-        // If Firestore fails, don’t block the UI
-        setOfferActive(false);
-      } finally {
-        setLoading(false);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+      } else {
+        setUserEmail(user.email);
       }
     });
-
     return () => unsub();
   }, [router]);
 
   const handleLogout = async () => {
     await signOut(auth);
-    router.push("/login");
+    router.push("/");
   };
 
-  if (loading) return null;
+  const goToPackages = (vehicle: string) => {
+    router.push(`/packages/${vehicle}`);
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-10">
-      <div className="max-w-5xl mx-auto">
-        {/* Top bar */}
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
-              Book your shoot
-            </h1>
-            <p className="text-white/60 mt-2 text-sm">
-              Choose a category, pick a package, and confirm your booking in
-              seconds.
-            </p>
+    <div className="min-h-screen bg-black text-white font-sans px-8">
 
-            {/* ✅ Email + Admin badge */}
-            <p className="text-white/40 mt-1 text-xs flex items-center gap-2 flex-wrap">
-              <span>Signed in as</span>
-              <span className="text-white/70">{user?.email}</span>
+      {/* Top Bar */}
+      <div className="flex items-center justify-between py-6">
+        <img
+          src="/charanstorycuts-logo.png"
+          alt="logo"
+          className="h-10 cursor-pointer"
+          onClick={() => router.push("/")}
+        />
 
-              {isAdmin && (
-                <span className="text-[10px] rounded-full border border-white/20 bg-white/10 px-2 py-1 text-white/80">
-                  Admin Mode
-                </span>
-              )}
-            </p>
-          </div>
-
-          {/* ✅ Admin + Logout */}
-          <div className="flex items-center gap-3">
-            {isAdmin && (
-              <button
-                onClick={() => router.push("/admin")}
-                className="text-sm border border-white/20 px-4 py-2 rounded-full hover:bg-white hover:text-black transition"
-              >
-                Admin
-              </button>
-            )}
-
-            <button
-              onClick={handleLogout}
-              className="text-sm border border-white/20 px-4 py-2 rounded-full hover:bg-white hover:text-black transition"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-
-        {/* Offer banner */}
-        {offerActive && (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
-                <div className="text-sm text-white/60">Welcome offer</div>
-                <div className="text-xl font-semibold mt-1">
-                  🎉 Your first shoot is just{" "}
-                  <span className="text-white">₹9</span>
-                </div>
-                <p className="text-sm text-white/60 mt-2">
-                  Pick any package below — the ₹9 offer will apply
-                  automatically at checkout.
-                </p>
-              </div>
-
-              <button
-                onClick={() => router.push("/packages/bike")}
-                className="bg-white text-black px-6 py-3 rounded-full font-medium hover:scale-105 transition"
-              >
-                Start with Bike →
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Section title */}
-        <div className="mt-10 flex items-end justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Choose your vehicle</h2>
-            <p className="text-white/60 text-sm mt-1">
-              We shoot both bikes and cars — cinematic, rolling shots, combo,
-              and delivery.
-            </p>
-          </div>
-        </div>
-
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {/* Bike */}
-          <button
-            onClick={() => router.push("/packages/bike")}
-            className="group text-left rounded-2xl border border-white/10 bg-white/5 p-7 hover:bg-white/10 transition"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-sm text-white/60">For Riders</div>
-
-                <div className="flex items-center gap-3 mt-2">
-                  <BikeIcon className="w-7 h-7 text-white/80" />
-                  <div className="text-2xl font-semibold">Bike Shoots</div>
-                </div>
-
-                <p className="text-sm text-white/60 mt-3 max-w-md">
-                  Crisp cinematic frames + dynamic rolling shots — crafted for
-                  reels.
-                </p>
-              </div>
-
-              <div className="text-white/50 group-hover:text-white transition text-xl">
-                →
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Cinematic
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Rolling
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Combo
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                New Bike Delivery
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Editing Included
-              </span>
-            </div>
-          </button>
-
-          {/* Car */}
-          <button
-            onClick={() => router.push("/packages/car")}
-            className="group text-left rounded-2xl border border-white/10 bg-white/5 p-7 hover:bg-white/10 transition"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-sm text-white/60">For Drivers</div>
-
-                <div className="flex items-center gap-3 mt-2">
-                  <CarIcon className="w-7 h-7 text-white/80" />
-                  <div className="text-2xl font-semibold">Car Shoots</div>
-                </div>
-
-                <p className="text-sm text-white/60 mt-3 max-w-md">
-                  Premium angles, clean motion, and a polished cinematic look.
-                </p>
-              </div>
-
-              <div className="text-white/50 group-hover:text-white transition text-xl">
-                →
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Cinematic
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Rolling
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Combo
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                New Car Delivery
-              </span>
-              <span className="text-xs rounded-full border border-white/10 bg-black/30 px-3 py-1 text-white/70">
-                Editing Included
-              </span>
-            </div>
-          </button>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-12 text-xs text-white/40">
-          Need something custom? We can also create a personalized package based
-          on your idea.
-        </div>
+        <button
+          onClick={handleLogout}
+          className="border border-white/30 px-5 py-2 rounded-full hover:bg-white hover:text-black transition cursor-pointer"
+        >
+          Logout
+        </button>
       </div>
+
+      {/* Hero Section */}
+      <section className="mt-12">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+          Book your shoot <span className="text-red-500">now</span>
+        </h1>
+
+        <p className="mt-4 text-white/60 text-lg">
+          Choose your vehicle and confirm your booking in seconds.
+        </p>
+
+        {userEmail && (
+          <p className="mt-2 text-sm text-white/40">
+            Signed in as {userEmail}
+          </p>
+        )}
+      </section>
+
+      {/* Vehicle Section */}
+      <section className="mt-20">
+        <h2 className="text-2xl font-semibold mb-10">
+          Choose your vehicle
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
+
+          {/* Bike Card */}
+          <div
+            onClick={() => goToPackages("bike")}
+            className="bg-white text-black rounded-2xl p-8 cursor-pointer hover:scale-[1.03] transition duration-300 shadow-lg"
+          >
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-semibold">Bike Shoots</h3>
+              <span className="text-xl">→</span>
+            </div>
+
+            <p className="mt-4 text-black/70">
+              Dynamic cinematic bike shoots crafted for reels.
+            </p>
+          </div>
+
+          {/* Car Card */}
+          <div
+            onClick={() => goToPackages("car")}
+            className="bg-white text-black rounded-2xl p-8 cursor-pointer hover:scale-[1.03] transition duration-300 shadow-lg"
+          >
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-semibold">Car Shoots</h3>
+              <span className="text-xl">→</span>
+            </div>
+
+            <p className="mt-4 text-black/70">
+              Premium cinematic car visuals with clean motion.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Cinematic Brand Statement */}
+      <section className="mt-28 text-center px-6 pb-24">
+        <div className="max-w-3xl mx-auto">
+
+          <h2 className="text-3xl md:text-5xl font-bold leading-tight tracking-tight">
+            Basic edits are everywhere.
+            <br />
+            <span className="text-red-500">Cinematic excellence</span> isn’t.
+          </h2>
+
+          <p className="mt-6 text-white/60 text-lg md:text-xl">
+            CharanStoryCuts creates visuals that feel like cinema —
+            clean storytelling, premium motion, zero compromise.
+          </p>
+
+        </div>
+      </section>
+
     </div>
   );
 }
