@@ -71,6 +71,7 @@ export default function PackagesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("Project ID:", process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID);
     const run = async () => {
       const user = auth.currentUser;
       if (!user) {
