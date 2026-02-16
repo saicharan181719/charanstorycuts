@@ -85,7 +85,36 @@ export default function PackagesPage() {
     };
 
     run();
-  }, [router]);
+  }, [router]);useEffect(() => {
+  const run = async () => {
+    try {
+      const user = auth.currentUser;
+
+      if (!user) {
+        router.replace("/login");
+        return;
+      }
+
+      const snap = await getDoc(doc(db, "users", user.uid));
+
+      const offerUsed = snap.exists()
+        ? !!snap.data().offerUsed
+        : false; // default false if doc doesn't exist
+
+      setOfferActive(!offerUsed);
+    } catch (error) {
+      console.error("Error fetching user doc:", error);
+
+      // If anything fails, still allow page to load
+      setOfferActive(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  run();
+}, [router]);
+
 
   const basePrice = prices[selected];
   const finalPrice = offerActive ? 9 : basePrice;
