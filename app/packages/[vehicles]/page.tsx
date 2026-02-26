@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import {
   CameraIcon,
   RollIcon,
@@ -22,10 +22,10 @@ const BIKE_PRICES: Record<PackageKey, number> = {
 };
 
 const CAR_PRICES: Record<PackageKey, number> = {
-  cinematic: 699,
-  rolling: 799,
-  combo: 1299,
-  delivery: 1159,
+  cinematic: 799,
+  rolling: 899,
+  combo: 1599,
+  delivery: 1259,
 };
 
 const TITLES: Record<PackageKey, string> = {
@@ -33,17 +33,6 @@ const TITLES: Record<PackageKey, string> = {
   rolling: "Rolling Shots",
   combo: "Combo (Cinematic + Rolling)",
   delivery: "New Vehicle Delivery",
-};
-
-const DETAILS: Record<PackageKey, string> = {
-  cinematic:
-    "Clean cinematic framing with smooth camera movements and premium output.",
-  rolling:
-    "Dynamic rolling shots with stable tracking and professional motion.",
-  combo:
-    "Complete cinematic + rolling experience crafted for standout content.",
-  delivery:
-    "Premium delivery reveal with highlights and stylish presentation.",
 };
 
 function PackageIcon({ type }: { type: PackageKey }) {
@@ -67,55 +56,46 @@ export default function PackagesPage() {
   const prices = vehicle === "car" ? CAR_PRICES : BIKE_PRICES;
 
   const [selected, setSelected] = useState<PackageKey>("cinematic");
-  const [offerActive, setOfferActive] = useState(false);
+  const [offerAllowed, setOfferAllowed] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Project ID:", process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID);
-    const run = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        router.replace("/login");
-        return;
-      }
+    const checkOffer = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          router.replace("/login");
+          return;
+        }
 
-      const snap = await getDoc(doc(db, "users", user.uid));
-      const offerUsed = snap.exists() ? !!snap.data().offerUsed : true;
-      setOfferActive(!offerUsed);
-      setLoading(false);
+        // 🔥 Check if user already has any paid booking
+        const q = query(
+          collection(db, "bookings"),
+          where("email", "==", user.email),
+          where("paymentStatus", "==", "paid")
+        );
+
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          setOfferAllowed(true); // first time user
+        } else {
+          setOfferAllowed(false); // already used
+        }
+      } catch (err) {
+        console.error("Offer check error:", err);
+        setOfferAllowed(false);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    run();
-  }, [router]);useEffect(() => {
-  const run = async () => {
-    try {
-      const user = auth.currentUser;
+    checkOffer();
+  }, [router]);
 
-      if (!user) {
-        router.replace("/login");
-        return;
-      }
-
-      const snap = await getDoc(doc(db, "users", user.uid));
-
-      const offerUsed = snap.exists()
-        ? !!snap.data().offerUsed
-        : false; // default false if doc doesn't exist
-
-      setOfferActive(!offerUsed);
-    } catch (error) {
-      console.error("Error fetching user doc:", error);
-
-      // If anything fails, still allow page to load
-      setOfferActive(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  run();
-}, [router]);
-
+  // 🔥 Remove offer for delivery always
+  const isDelivery = selected === "delivery";
+  const offerActive = offerAllowed && !isDelivery;
 
   const basePrice = prices[selected];
   const finalPrice = offerActive ? 9 : basePrice;
@@ -136,8 +116,6 @@ export default function PackagesPage() {
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
-
-      {/* LOGO */}
       <div className="absolute top-6 left-6">
         <img
           src="/charanstorycuts-logo.png"
@@ -148,7 +126,6 @@ export default function PackagesPage() {
       </div>
 
       <div className="max-w-6xl mx-auto">
-
         <button
           onClick={() => router.push("/dashboard")}
           className="text-sm text-white/60 hover:text-white transition mb-4"
@@ -173,12 +150,13 @@ export default function PackagesPage() {
           )}
         </div>
 
-        {/* PACKAGE BUTTONS */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10">
           {(["cinematic", "rolling", "combo", "delivery"] as PackageKey[]).map(
             (key) => {
               const active = selected === key;
-              const shownPrice = offerActive ? 9 : prices[key];
+
+              const shownPrice =
+                offerAllowed && key !== "delivery" ? 9 : prices[key];
 
               return (
                 <button
@@ -200,7 +178,7 @@ export default function PackagesPage() {
 
                   <div className="mt-3 text-sm opacity-80">
                     ₹{shownPrice}
-                    {offerActive && (
+                    {offerAllowed && key !== "delivery" && (
                       <span className="ml-2 line-through opacity-50">
                         ₹{prices[key]}
                       </span>
@@ -212,7 +190,6 @@ export default function PackagesPage() {
           )}
         </div>
 
-        {/* DETAILS CARD */}
         <div className="mt-12 rounded-2xl bg-white/5 border border-white/10 p-8">
           <div className="flex flex-col md:flex-row justify-between gap-6">
             <div>
@@ -221,9 +198,7 @@ export default function PackagesPage() {
                   ? `New ${vehicleLabel} Delivery`
                   : TITLES[selected]}
               </h2>
-
-              <p className="text-white/70">{DETAILS[selected]}</p>
-              <p className="mt-3 text-white/70">✅ Editing included</p>
+              <p className="mt-3">✅ Editing included</p>
             </div>
 
             <div className="text-right">
@@ -241,16 +216,6 @@ export default function PackagesPage() {
             </div>
           </div>
         </div>
-
-        {/* PREMIUM ATTRACTIVE TEXT */}
-        <div className="mt-16 text-center">
-          <p className="text-white/60 italic text-sm max-w-2xl mx-auto">
-            Every frame we shoot carries intention. Every rupee you invest
-            returns in quality With <span className="text-white font-semibold">charanstorycuts</span> you’re not paying for a shoot — 
-            you’re investing in what world sees you!
-          </p>
-        </div>
-
       </div>
     </div>
   );
