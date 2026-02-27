@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 type Booking = {
   id: string;
   fullName: string;
-  mobile?: string;
+  phone?: string;
   vehicleModel?: string;
   pack?: string;
   city?: string;
@@ -99,8 +99,8 @@ export default function AdminView() {
                 </div>
 
                 <div>
-                  <p className="text-white/50">Mobile</p>
-                  <p>{booking.mobile}</p>
+                  <p className="text-white/50">Phone</p>
+                  <p>{booking.phone}</p>
                 </div>
 
                 <div>
