@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { motion } from "framer-motion";
 
@@ -11,6 +15,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // 👈 NEW
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -61,7 +66,6 @@ export default function LoginPage() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur"
         >
-          {/* Title */}
           <h1 className="text-2xl font-semibold text-center">
             Login to <span className="text-white">charanstorycuts</span>
           </h1>
@@ -85,8 +89,9 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-white/10" />
           </div>
 
-          {/* Email */}
+          {/* Email + Password */}
           <div className="space-y-4">
+
             <input
               type="email"
               placeholder="you@example.com"
@@ -95,13 +100,25 @@ export default function LoginPage() {
               className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
             />
 
-            <input
-              type="password"
-              placeholder="Minimum 6 characters"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
-            />
+            {/* Password with Eye Toggle */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Minimum 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 pr-12 outline-none focus:border-white/30 transition"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition"
+              >
+                {showPassword ? "⌣" : "👁"}
+              </button>
+            </div>
+
           </div>
 
           {/* Error */}
@@ -131,7 +148,6 @@ export default function LoginPage() {
             </span>
           </p>
 
-          {/* Footer note */}
           <p className="mt-4 text-xs text-white/30 text-center">
             By continuing, you agree to basic terms of service.
           </p>

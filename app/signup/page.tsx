@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
@@ -10,35 +11,36 @@ import {
 import { auth } from "@/lib/firebase";
 import { motion } from "framer-motion";
 
-export default function SignupPage() {
+export default function LoginPage() {
   const router = useRouter();
+
+  const [isSignup, setIsSignup] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const signupEmail = async () => {
+  const handleEmailAuth = async () => {
     setError("");
     setLoading(true);
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      setLoading(false);
-      return;
-    }
-
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      if (isSignup) {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err?.message || "Failed to create account");
+      setError("Authentication failed. Check details.");
     } finally {
       setLoading(false);
     }
   };
 
-  const signupGoogle = async () => {
+  const loginGoogle = async () => {
     setError("");
     setLoading(true);
     try {
@@ -46,7 +48,7 @@ export default function SignupPage() {
       await signInWithPopup(auth, provider);
       router.push("/dashboard");
     } catch {
-      setError("Google signup failed");
+      setError("Google login failed");
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,6 @@ export default function SignupPage() {
         />
       </div>
 
-      {/* Center Card */}
       <div className="flex items-center justify-center min-h-screen px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -72,18 +73,20 @@ export default function SignupPage() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur"
         >
-          {/* Title */}
           <h1 className="text-2xl font-semibold text-center">
-            Create your <span className="text-white">charanstorycuts</span> account
+            {isSignup ? "Create Account" : "Login to"}{" "}
+            <span className="text-white">charanstorycuts</span>
           </h1>
 
           <p className="text-sm text-white/60 text-center mt-2">
-            Book your shoot in minutes
+            {isSignup
+              ? "Start booking your shoot"
+              : "Continue booking your shoot"}
           </p>
 
-          {/* Google Signup */}
+          {/* Google */}
           <button
-            onClick={signupGoogle}
+            onClick={loginGoogle}
             className="mt-6 w-full bg-white text-black py-3 rounded-full font-medium hover:scale-[1.02] transition cursor-pointer"
           >
             Continue with Google
@@ -96,7 +99,7 @@ export default function SignupPage() {
             <div className="flex-1 h-px bg-white/10" />
           </div>
 
-          {/* Email & Password */}
+          {/* Email + Password */}
           <div className="space-y-4">
             <input
               type="email"
@@ -106,13 +109,23 @@ export default function SignupPage() {
               className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
             />
 
-            <input
-              type="password"
-              placeholder="Minimum 6 characters"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none focus:border-white/30 transition"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Minimum 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 pr-12 outline-none focus:border-white/30 transition"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition"
+              >
+                {showPassword ? "⌣" : "👁"}
+              </button>
+            </div>
           </div>
 
           {/* Error */}
@@ -122,27 +135,33 @@ export default function SignupPage() {
             </div>
           )}
 
-          {/* Create Account Button */}
+          {/* Action Button */}
           <button
-            onClick={signupEmail}
+            onClick={handleEmailAuth}
             disabled={loading}
             className="mt-6 w-full border border-white/20 py-3 rounded-full hover:bg-white hover:text-black transition cursor-pointer disabled:opacity-50"
           >
-            {loading ? "Creating account…" : "Create account"}
+            {loading
+              ? "Please wait..."
+              : isSignup
+              ? "Create Account"
+              : "Login"}
           </button>
 
-          {/* Login Redirect */}
+          {/* Toggle */}
           <p className="mt-5 text-sm text-center text-white/60">
-            Already have an account?{" "}
+            {isSignup ? "Already have an account?" : "New to charanstorycuts?"}{" "}
             <span
-              onClick={() => router.push("/login")}
+              onClick={() => {
+                setIsSignup(!isSignup);
+                setError("");
+              }}
               className="underline cursor-pointer hover:text-white"
             >
-              Login
+              {isSignup ? "Login" : "Create account"}
             </span>
           </p>
 
-          {/* Footer note */}
           <p className="mt-4 text-xs text-white/30 text-center">
             By continuing, you agree to basic terms of service.
           </p>
