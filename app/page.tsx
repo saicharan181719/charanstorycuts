@@ -73,7 +73,7 @@ export default function HomePage() {
         >
           Get your first shoot for{" "}
           <span className="ml-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold shadow-sm">
-            ₹9
+            ₹99
           </span>
         </motion.button>
       </section>
