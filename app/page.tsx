@@ -69,7 +69,7 @@ export default function HomePage() {
           transition={{ duration: 0.6, delay: 0.35 }}
           whileHover={{ scale: 1.05 }}
           onClick={handleBook}
-          className="mt-10 bg-white text-black px-8 py-4 rounded-full font-medium transition cursor-pointer"
+          className="mt-10 bg-white text-black px-8 py-4 rounded-full font-medium transition cursor-pointer shadow-lg hover:shadow-yellow-500/30"
         >
           Get your first shoot for{" "}
           <span className="ml-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold shadow-sm">
@@ -83,7 +83,7 @@ export default function HomePage() {
           transition={{ delay: 0.35 }}
           className="mt-3 text-white/70 max-w-xl text-sm italic"
         >
-          ( Limited time Offer )
+          ⚡Limited time Offer - Book now and save big!⚡
         </motion.p>
       </section>
 
