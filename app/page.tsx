@@ -76,6 +76,15 @@ export default function HomePage() {
             ₹99
           </span>
         </motion.button>
+        {/* Limited Offer Text */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="mt-3 text-white/70 max-w-xl text-sm italic"
+        >
+          ( Limited time Offer )
+        </motion.p>
       </section>
 
      {/* Our Work */}
