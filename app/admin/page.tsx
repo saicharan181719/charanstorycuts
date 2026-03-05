@@ -326,12 +326,24 @@ export default function AdminView() {
                   <div className="flex gap-4 mt-6">
 
                     <a
-                      href={`https://wa.me/91${booking.phone}`}
-                      target="_blank"
-                      className="text-sm bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-black font-medium cursor-pointer"
-                    >
-                      WhatsApp Client
-                    </a>
+  href={`https://wa.me/91${booking.phone}?text=${encodeURIComponent(
+`Hello ${booking.fullName},
+
+Your booking with CharanStoryCuts has been successfully confirmed!
+
+Vehicle: ${booking.vehicleModel}
+Package: ${booking.pack}
+Payment ID: ${booking.paymentId}
+
+Our team will contact you shortly to schedule your cinematic shoot.
+
+Thank you for choosing CharanStoryCuts!`
+  )}`}
+  target="_blank"
+  className="text-sm bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-black font-medium cursor-pointer"
+>
+  WhatsApp Client
+</a>
 
                   </div>
 
