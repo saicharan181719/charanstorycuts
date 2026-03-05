@@ -71,9 +71,9 @@ export default function HomePage() {
           onClick={handleBook}
           className="mt-10 bg-white text-black px-8 py-4 rounded-full font-medium transition cursor-pointer shadow-lg hover:shadow-yellow-500/30"
         >
-          Get your first shoot for{" "}
+          Get your first shoot for{""}
           <span className="ml-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold shadow-sm">
-            ₹9
+            ₹99
           </span>
         </motion.button>
         {/* Limited Offer Text */}

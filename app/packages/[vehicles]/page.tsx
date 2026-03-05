@@ -98,7 +98,7 @@ export default function PackagesPage() {
   const offerActive = offerAllowed && !isDelivery;
 
   const basePrice = prices[selected];
-  const finalPrice = offerActive ? 1 : basePrice;
+  const finalPrice = offerActive ? 99 : basePrice;
 
   const proceed = () => {
     const qs = new URLSearchParams({
@@ -145,7 +145,7 @@ export default function PackagesPage() {
 
           {offerActive && (
             <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm">
-              🎉 First-time offer: ₹1
+              🎉 First-time offer: ₹99
             </div>
           )}
         </div>
@@ -156,7 +156,7 @@ export default function PackagesPage() {
               const active = selected === key;
 
               const shownPrice =
-                offerAllowed && key !== "delivery" ? 1 : prices[key];
+                offerAllowed && key !== "delivery" ? 99 : prices[key];
 
               return (
                 <button
