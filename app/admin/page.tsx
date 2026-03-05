@@ -22,6 +22,7 @@ type Booking = {
   finalPrice?: number;
   createdAt?: any;
   paymentId?: string;
+  notes?: string;
 };
 
 export default function AdminView() {
@@ -30,6 +31,7 @@ export default function AdminView() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [copied, setCopied] = useState(false);
+  const [selectedNotes, setSelectedNotes] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -333,6 +335,23 @@ export default function AdminView() {
 
                   </div>
 
+                  {/* NOTES BUTTON */}
+
+                  <div className="mt-6">
+                    {booking.notes ? (
+                      <button
+                        onClick={() => setSelectedNotes(booking.notes || "")}
+                        className="text-sm border border-white/30 px-4 py-2 rounded-full hover:bg-white hover:text-black transition cursor-pointer"
+                      >
+                        Show Notes
+                      </button>
+                    ) : (
+                      <p className="text-white/40 text-xs italic">
+                        No notes provided
+                      </p>
+                    )}
+                  </div>
+
                 </div>
 
               ))}
@@ -342,6 +361,33 @@ export default function AdminView() {
           </div>
 
         ))
+      )}
+
+      {/* NOTES POPUP */}
+
+      {selectedNotes && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+          <div className="bg-black border border-white/20 rounded-2xl p-8 max-w-md w-full">
+
+            <h2 className="text-xl font-semibold mb-4">
+              Client Notes
+            </h2>
+
+            <p className="text-white/80 text-sm leading-relaxed">
+              {selectedNotes}
+            </p>
+
+            <button
+              onClick={() => setSelectedNotes(null)}
+              className="mt-6 border border-white/30 px-4 py-2 rounded-full text-sm hover:bg-white hover:text-black transition cursor-pointer"
+            >
+              Close
+            </button>
+
+          </div>
+
+        </div>
       )}
 
     </div>
