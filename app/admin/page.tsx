@@ -107,6 +107,25 @@ export default function AdminView() {
     0
   );
 
+  const todayRevenue = todayBookings.reduce(
+    (sum, b) => sum + (b.finalPrice || 0),
+    0
+  );
+
+  const thisMonth = new Date().getMonth();
+
+  const monthRevenue = bookings.reduce((sum, b) => {
+    const bookingDate = b.createdAt?.toDate
+      ? b.createdAt.toDate()
+      : null;
+
+    if (bookingDate && bookingDate.getMonth() === thisMonth) {
+      sum += b.finalPrice || 0;
+    }
+
+    return sum;
+  }, 0);
+
   /* -----------------------------
   SEARCH
   ----------------------------- */
@@ -177,14 +196,7 @@ export default function AdminView() {
 
       {/* STATS */}
 
-      <div className="grid md:grid-cols-3 gap-6 mb-12">
-
-        <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-          <p className="text-white/50 text-sm">Total Bookings</p>
-          <p className="text-3xl font-semibold mt-2">
-            {bookings.length}
-          </p>
-        </div>
+      <div className="grid md:grid-cols-5 gap-6 mb-12">
 
         <div className="bg-white/5 border border-white/10 rounded-xl p-6">
           <p className="text-white/50 text-sm">Bookings Today</p>
@@ -194,8 +206,29 @@ export default function AdminView() {
         </div>
 
         <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-          <p className="text-white/50 text-sm">Total Revenue</p>
+          <p className="text-white/50 text-sm">Revenue Today</p>
           <p className="text-3xl font-semibold mt-2 text-green-400">
+            ₹ {todayRevenue}
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+          <p className="text-white/50 text-sm">Revenue This Month</p>
+          <p className="text-3xl font-semibold mt-2 text-yellow-400">
+            ₹ {monthRevenue}
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+          <p className="text-white/50 text-sm">Total Bookings</p>
+          <p className="text-3xl font-semibold mt-2 text-teal-400">
+            {bookings.length}
+          </p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+          <p className="text-white/50 text-sm">Total Revenue</p>
+          <p className="text-3xl font-semibold mt-2 text-teal-400">
             ₹ {totalRevenue}
           </p>
         </div>
@@ -326,24 +359,12 @@ export default function AdminView() {
                   <div className="flex gap-4 mt-6">
 
                     <a
-  href={`https://wa.me/91${booking.phone}?text=${encodeURIComponent(
-`Hello ${booking.fullName},
-
-Your booking with CharanStoryCuts has been successfully confirmed!
-
-Vehicle: ${booking.vehicleModel}
-Package: ${booking.pack}
-Payment ID: ${booking.paymentId}
-
-Our team will contact you shortly to schedule your cinematic shoot.
-
-Thank you for choosing CharanStoryCuts!`
-  )}`}
-  target="_blank"
-  className="text-sm bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-black font-medium cursor-pointer"
->
-  WhatsApp Client
-</a>
+                      href={`https://wa.me/91${booking.phone}`}
+                      target="_blank"
+                      className="text-sm bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-black font-medium cursor-pointer"
+                    >
+                      WhatsApp Client
+                    </a>
 
                   </div>
 
