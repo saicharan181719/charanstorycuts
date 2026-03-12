@@ -18,14 +18,14 @@ const BIKE_PRICES: Record<PackageKey, number> = {
   cinematic: 499,
   rolling: 599,
   combo: 999,
-  delivery: 759,
+  delivery: 1259,
 };
 
 const CAR_PRICES: Record<PackageKey, number> = {
   cinematic: 799,
   rolling: 899,
   combo: 1599,
-  delivery: 1259,
+  delivery: 1759,
 };
 
 const TITLES: Record<PackageKey, string> = {
