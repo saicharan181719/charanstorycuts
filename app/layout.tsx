@@ -3,7 +3,7 @@ import "./globals.css";
 export const metadata = {
   title: "CharanStoryCuts",
   description: "Professional videography & editing",
-  google: <meta name="google-site-verification" content="ir9ByAvwgyeerwKR_bhtg3YuQY0_4NYJjLxSx_nVu7o" />
+  google:"ir9ByAvwgyeerwKR_bhtg3YuQY0_4NYJjLxSx_nVu7o"
 };
 
 import "./globals.css";
