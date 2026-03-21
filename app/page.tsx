@@ -60,7 +60,7 @@ export default function HomePage() {
           transition={{ duration: 0.9, delay: 0.15 }}
           className="mt-6 text-white/70 max-w-xl"
         >
-          Cinematic edits. Clean stories. Crafted to make your moments unforgettable.
+          Cinematic edits. Clean stories. Crafted to make your machine stand out.  
         </motion.p>
 
         <motion.button
