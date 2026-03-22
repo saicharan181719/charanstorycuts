@@ -90,6 +90,9 @@ export default function HomePage() {
      {/* Our Work */}
       <section className="mt-28 px-8">
         <h2 className="text-2xl font-semibold mb-8">Our Work</h2>
+        <p>
+  CharanStoryCuts is a videography brand specializing in Automotive Shoots. We create high-quality reels and professional automobile content. We are passionate about capturing the essence of your machine and telling its story through cinematic visuals. Whether it's a bike, car, or any automobile, we bring out its personality in every frame.
+</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Bike Shoots */}
@@ -100,7 +103,7 @@ export default function HomePage() {
           >
             <img
               src="/bike.jpg"
-              alt="Bike Shoots"
+              alt="Bike cinematic videography in Hyderabad"
               className="w-full h-full object-cover group-hover:scale-105 transition"
             />
             <div className="absolute inset-0 bg-black/40 flex items-end p-5">
@@ -116,7 +119,7 @@ export default function HomePage() {
           >
             <img
               src="/car.jpg"
-              alt="Car Shoots"
+              alt="Car cinematic videography in Hyderabad"
               className="w-full h-full object-cover group-hover:scale-105 transition"
             />
             <div className="absolute inset-0 bg-black/40 flex items-end p-5">
