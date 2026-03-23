@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "CharanStoryCuts| Automotive Videography in Hyderabad",
+  title: "CharanStoryCuts",
   keywords: [
     "bike videography Hyderabad",
     "car videography Hyderabad",

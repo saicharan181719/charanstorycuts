@@ -15,17 +15,17 @@ type Vehicle = "bike" | "car";
 type PackageKey = "cinematic" | "rolling" | "combo" | "delivery";
 
 const BIKE_PRICES: Record<PackageKey, number> = {
-  cinematic: 499,
-  rolling: 599,
-  combo: 999,
-  delivery: 1259,
+  cinematic: 799,
+  rolling: 899,
+  combo: 1199,
+  delivery: 1549,
 };
 
 const CAR_PRICES: Record<PackageKey, number> = {
-  cinematic: 799,
-  rolling: 899,
-  combo: 1599,
-  delivery: 1759,
+  cinematic: 1099,
+  rolling: 1199,
+  combo: 1499,
+  delivery: 1949,
 };
 
 const TITLES: Record<PackageKey, string> = {
