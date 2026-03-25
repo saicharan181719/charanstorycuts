@@ -10,6 +10,10 @@ export default function HomePage() {
   const router = useRouter();
   const [ready, setReady] = useState(false);
 
+  // ===== ABOUT SECTION STATE START =====
+  const [openAbout, setOpenAbout] = useState(false);
+  // ===== ABOUT SECTION STATE END =====
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, () => setReady(true));
     return () => unsub();
@@ -76,6 +80,7 @@ export default function HomePage() {
             ₹99
           </span>
         </motion.button>
+
         {/* Limited Offer Text */}
         <motion.p
           initial={{ opacity: 0 }}
@@ -142,6 +147,17 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ===== ABOUT SECTION TRIGGER START ===== */}
+      <div className="text-center mt-16">
+        <button
+          onClick={() => setOpenAbout(true)}
+          className="text-white/60 hover:text-white transition text-sm border border-white/30 px-5 py-2 rounded-full cursor-pointer"
+        >
+         ℹ️ About CharanStorycuts
+        </button>
+      </div>
+      {/* ===== ABOUT SECTION TRIGGER END ===== */}
+
       {/* Social Links */}
       <section className="mt-24 px-8 text-center">
         <h3 className="text-lg font-semibold mb-6">Follow our work</h3>
@@ -175,6 +191,60 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+
+      {/* ===== ABOUT POPUP MODAL START ===== */}
+      {openAbout && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={() => setOpenAbout(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#111] text-white w-[90%] max-w-md rounded-2xl p-6 relative max-h-[80vh] overflow-y-auto"
+          >
+            <button
+              onClick={() => setOpenAbout(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+
+            <div className="flex flex-col items-center text-center gap-4">
+              <img
+                src="/charan.jpg"
+                alt="Sai Charan Gokam"
+                className="w-24 h-24 rounded-full object-cover border border-gray-600"
+              />
+
+              <h2 className="text-xl font-semibold">Sai Charan Gokam</h2>
+              <p className="text-xs text-gray-500">
+                Founder • CharanStorycuts
+              </p>
+
+              <div className="w-10 h-[2px] bg-yellow-500 rounded"></div>
+
+              <p className="text-gray-400 text-sm leading-relaxed">
+                At Charanstorycuts, we don’t just shoot vehicles — we tell their story.
+
+                Every bike and car has its own personality, its own presence. Our goal is
+                to capture that through cinematic visuals that feel powerful, clean, and unique.
+
+                From detailed close-ups to dynamic motion shots, every frame is crafted
+                with precision to make your machine stand out.
+
+                This isn’t just videography — it’s storytelling for automotive passion.
+              </p>
+
+              <div className="text-sm text-gray-300 space-y-1 mt-2">
+                <p>📱 +91 7730823301</p>
+                <p>📧 charanstorycuts@gmail.com</p>
+                <p>📍 Hyderabad</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ===== ABOUT POPUP MODAL END ===== */}
 
       {/* Footer */}
       <footer className="mt-24 px-8 pb-8 text-center text-xs text-white/40">
