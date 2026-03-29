@@ -214,38 +214,74 @@ export default function HomePage() {
               ✕
             </button>
 
-            <div className="flex flex-col items-center text-center gap-4">
-              <img
-                src="/charan.jpg"
-                alt="Sai Charan Gokam"
-                className="w-24 h-24 rounded-full object-cover border border-gray-600"
-              />
+            <div className="flex flex-col items-center text-center gap-6">
 
-              <h2 className="text-xl font-semibold">Sai Charan Gokam</h2>
-              <p className="text-xs text-gray-500">
-                Founder • CharanStorycuts
-              </p>
+  {/* Profile */}
+  <div className="relative">
+    <div className="absolute inset-0 blur-xl bg-yellow-500/20 rounded-full"></div>
+    <img
+      src="/charan.jpg"
+      alt="Sai Charan Gokam"
+      className="relative w-24 h-24 rounded-full object-cover border border-gray-600"
+    />
+  </div>
 
-              <div className="w-10 h-[2px] bg-yellow-500 rounded"></div>
+  <div>
+    <h2 className="text-xl font-semibold tracking-wide">Sai Charan Gokam</h2>
+    <p className="text-xs text-gray-500">
+      Founder • CharanStorycuts
+    </p>
+  </div>
 
-              <p className="text-gray-400 text-sm leading-relaxed">
-                At Charanstorycuts, we don’t just shoot vehicles — we tell their story.
+  <div className="w-12 h-[2px] bg-yellow-500 rounded"></div>
 
-                Every bike and car has its own personality, its own presence. Our goal is
-                to capture that through cinematic visuals that feel powerful, clean, and unique.
+  {/* Description */}
+  <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+    At CharanStorycuts, we create cinematic visuals that highlight the true
+    personality of your vehicle. Our goal is to deliver powerful,
+    clean and professional automotive storytelling.
+  </p>
 
-                From detailed close-ups to dynamic motion shots, every frame is crafted
-                with precision to make your machine stand out.
+  {/* Services */}
+  <div className="w-full text-left mt-2">
+    <p className="font-semibold text-white mb-2">Our Services</p>
 
-                This isn’t just videography — it’s storytelling for automotive passion.
-              </p>
+    <div className="grid grid-cols-2 gap-2 text-sm text-gray-400">
+      <div>🎬 Cinematic Shots</div>
+      <div>🏍 Rolling Shots</div>
+      <div>🔥 Combo (Cinematic + Rolling)</div>
+      <div>🚗 New Vehicle Delivery</div>
+    </div>
+  </div>
 
-              <div className="text-sm text-gray-300 space-y-1 mt-2">
-                <p>📱 +91 7730823301</p>
-                <p>📧 charanstorycuts@gmail.com</p>
-                <p>📍 Hyderabad</p>
-              </div>
-            </div>
+  {/* Equipment */}
+  <div className="w-full text-left">
+    <p className="font-semibold text-white mb-2">Equipment We Use</p>
+
+    <div className="space-y-1 text-sm text-gray-400">
+      <div>📱 iPhone 16 Pro Max</div>
+      <div>🎥 DJI Osmo Mobile 7 (Gimbal)</div>
+    </div>
+  </div>
+
+  {/* Contact */}
+  <div className="w-full text-left text-sm text-gray-300 space-y-1 mt-2">
+    <p className="font-semibold text-white mb-2">Contact Information</p>
+    <p>📱 +91 7730823301</p>
+    <p>📧 charanstorycuts@gmail.com</p>
+    <p>📍 Hyderabad</p>
+  </div>
+
+  {/* Book Button */}
+  <button
+    onClick={handleBook}
+    className="mt-3 bg-white text-black px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition shadow-lg hover:shadow-yellow-500/30 cursor-pointer"
+  >
+    Book Your Shoot
+  </button>
+
+</div>
+
           </div>
         </div>
       )}
