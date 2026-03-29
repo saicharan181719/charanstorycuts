@@ -145,7 +145,7 @@ export default function PackagesPage() {
 
           {offerActive && (
             <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm">
-              🎉 First-time offer: ₹500
+              🎉Welcome Offer: ₹500
             </div>
           )}
         </div>
