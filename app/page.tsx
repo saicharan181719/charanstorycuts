@@ -147,16 +147,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== ABOUT SECTION TRIGGER START ===== */}
-      <div className="text-center mt-16">
-        <button
-          onClick={() => setOpenAbout(true)}
-          className="text-white/60 hover:text-white transition text-sm border border-white/30 px-5 py-2 rounded-full cursor-pointer"
-        >
-         ℹ️ About CharanStorycuts
-        </button>
-      </div>
-      {/* ===== ABOUT SECTION TRIGGER END ===== */}
+      {/* ===== FLOATING ABOUT BUTTON (NEW POSITION) ===== */}
+<div className="fixed bottom-6 right-6 z-40">
+  <button
+    onClick={() => setOpenAbout(true)}
+    className="group flex items-center gap-2 bg-[#111] border border-white/20 hover:border-white/40 px-4 py-3 rounded-full shadow-lg backdrop-blur-md transition-all duration-300 overflow-hidden cursor-pointer"
+  >
+    <span className="text-lg">ℹ️</span>
+
+    <span className="max-w-0 overflow-hidden group-hover:max-w-xs whitespace-nowrap transition-all duration-300 text-sm text-white/80">
+      About CharanStorycuts
+    </span>
+  </button>
+</div>
+
+      {/* ===== END FLOATING ABOUT BUTTON ===== */}
 
       {/* Social Links */}
       <section className="mt-12 px-8 text-center">
@@ -192,7 +197,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== ABOUT POPUP MODAL START ===== */}
+      {/* ABOUT MODAL (UNCHANGED) */}
       {openAbout && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
@@ -244,7 +249,6 @@ export default function HomePage() {
           </div>
         </div>
       )}
-      {/* ===== ABOUT POPUP MODAL END ===== */}
 
       {/* Footer */}
       <footer className="mt-12 px-8 pb-8 text-center text-xs text-white/40">
