@@ -159,7 +159,7 @@ export default function HomePage() {
       {/* ===== ABOUT SECTION TRIGGER END ===== */}
 
       {/* Social Links */}
-      <section className="mt-24 px-8 text-center">
+      <section className="mt-12 px-8 text-center">
         <h3 className="text-lg font-semibold mb-6">Follow our work</h3>
 
         <div className="flex justify-center gap-10">
@@ -247,7 +247,7 @@ export default function HomePage() {
       {/* ===== ABOUT POPUP MODAL END ===== */}
 
       {/* Footer */}
-      <footer className="mt-24 px-8 pb-8 text-center text-xs text-white/40">
+      <footer className="mt-12 px-8 pb-8 text-center text-xs text-white/40">
         © {new Date().getFullYear()} charanstorycuts. All rights reserved.
       </footer>
     </div>
