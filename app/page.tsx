@@ -148,18 +148,19 @@ export default function HomePage() {
       </section>
 
       {/* ===== FLOATING ABOUT BUTTON (NEW POSITION) ===== */}
-<div className="fixed bottom-6 right-6 z-40">
+<div className="fixed bottom-5 right-5 z-40">
   <button
     onClick={() => setOpenAbout(true)}
-    className="group flex items-center gap-2 bg-[#111] border border-white/20 hover:border-white/40 px-4 py-3 rounded-full shadow-lg backdrop-blur-md transition-all duration-300 overflow-hidden cursor-pointer"
+    className="group flex items-center justify-start bg-[#111] border border-white/20 hover:border-white/40 w-12 h-12 rounded-full shadow-lg backdrop-blur-md transition-all duration-300 cursor-pointer hover:w-44 overflow-hidden cursor-pointer pl-3"
   >
-    <span className="text-lg">ℹ️</span>
+    <span className="text-base flex-shrink-0">ℹ️</span>
 
-    <span className="max-w-0 overflow-hidden group-hover:max-w-xs whitespace-nowrap transition-all duration-300 text-sm text-white/80">
-      About CharanStorycuts
+    <span className="ml-2 opacity-0 group-hover:opacity-100 whitespace-nowrap text-sm text-white/80 transition">
+      About Us
     </span>
   </button>
 </div>
+
 
       {/* ===== END FLOATING ABOUT BUTTON ===== */}
 
