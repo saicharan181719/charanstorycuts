@@ -70,14 +70,13 @@ export default function HomePage() {
         <motion.button
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
           whileHover={{ scale: 1.05 }}
           onClick={handleBook}
-          className="mt-10 bg-white text-black px-8 py-4 rounded-full font-medium transition cursor-pointer shadow-lg hover:shadow-yellow-500/30"
+          className="mt-10 bg-white text-black pl-6 pr-1 px-8 py-4 rounded-full font-bold transition cursor-pointer shadow-lg hover:shadow-yellow-500/30"
         >
-          Get your first shoot for{""}
-          <span className="ml-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold shadow-sm">
-            ₹500
+          Get your first shoot now 🎥
+          <span className="ml-1 px-3 py-1">
           </span>
         </motion.button>
 
@@ -99,7 +98,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Bike Shoots */}
           <a
-            href="https://www.instagram.com/reel/DO8zp3cDw8j/"
+            href="https://www.instagram.com/reel/DW3VonDEetC/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
             target="_blank"
             className="group cursor-pointer relative rounded-2xl overflow-hidden border border-white/10"
           >
@@ -131,7 +130,7 @@ export default function HomePage() {
 
           {/* Cinematic Reels */}
           <a
-            href="https://www.instagram.com/reel/DT0dmolDwwQ/"
+            href="https://www.instagram.com/reel/DaFlIiAg9xo/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
             target="_blank"
             className="group cursor-pointer relative rounded-2xl overflow-hidden border border-white/10"
           >
