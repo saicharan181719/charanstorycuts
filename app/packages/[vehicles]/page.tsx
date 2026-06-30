@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { auth, db } from "@/lib/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import {
   CameraIcon,
   RollIcon,
@@ -15,17 +13,17 @@ type Vehicle = "bike" | "car";
 type PackageKey = "cinematic" | "rolling" | "combo" | "delivery";
 
 const BIKE_PRICES: Record<PackageKey, number> = {
-  cinematic: 799,
-  rolling: 899,
-  combo: 1199,
-  delivery: 1549,
+  cinematic: 1499,
+  rolling: 1599,
+  combo: 1999,
+  delivery: 2500,
 };
 
 const CAR_PRICES: Record<PackageKey, number> = {
-  cinematic: 1099,
-  rolling: 1199,
-  combo: 1499,
-  delivery: 1949,
+  cinematic: 1999,
+  rolling: 2299,
+  combo: 2499,
+  delivery: 2999,
 };
 
 const TITLES: Record<PackageKey, string> = {
@@ -56,49 +54,10 @@ export default function PackagesPage() {
   const prices = vehicle === "car" ? CAR_PRICES : BIKE_PRICES;
 
   const [selected, setSelected] = useState<PackageKey>("cinematic");
-  const [offerAllowed, setOfferAllowed] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkOffer = async () => {
-      try {
-        const user = auth.currentUser;
-        if (!user) {
-          router.replace("/login");
-          return;
-        }
-
-        // 🔥 Check if user already has any paid booking
-        const q = query(
-          collection(db, "bookings"),
-          where("email", "==", user.email),
-          where("paymentStatus", "==", "paid")
-        );
-
-        const snap = await getDocs(q);
-
-        if (snap.empty) {
-          setOfferAllowed(true); // first time user
-        } else {
-          setOfferAllowed(false); // already used
-        }
-      } catch (err) {
-        console.error("Offer check error:", err);
-        setOfferAllowed(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkOffer();
-  }, [router]);
 
   // 🔥 Remove offer for delivery always
-  const isDelivery = selected === "delivery";
-  const offerActive = offerAllowed && !isDelivery;
-
   const basePrice = prices[selected];
-  const finalPrice = offerActive ? 500 : basePrice;
+  const finalPrice = basePrice;
 
   const proceed = () => {
     const qs = new URLSearchParams({
@@ -106,13 +65,11 @@ export default function PackagesPage() {
       pack: selected,
       basePrice: String(basePrice),
       finalPrice: String(finalPrice),
-      offerActive: offerActive ? "1" : "0",
+      offerActive: "0",
     }).toString();
 
     router.push(`/booking?${qs}`);
   };
-
-  if (loading) return null;
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
@@ -143,11 +100,6 @@ export default function PackagesPage() {
             </p>
           </div>
 
-          {offerActive && (
-            <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm">
-              🎉Welcome Offer: ₹500
-            </div>
-          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10">
@@ -155,8 +107,7 @@ export default function PackagesPage() {
             (key) => {
               const active = selected === key;
 
-              const shownPrice =
-                offerAllowed && key !== "delivery" ? 500 : prices[key];
+              const shownPrice = prices[key];
 
               return (
                 <button
@@ -178,11 +129,6 @@ export default function PackagesPage() {
 
                   <div className="mt-3 text-sm opacity-80">
                     ₹{shownPrice}
-                    {offerAllowed && key !== "delivery" && (
-                      <span className="ml-2 line-through opacity-50">
-                        ₹{prices[key]}
-                      </span>
-                    )}
                   </div>
                 </button>
               );
