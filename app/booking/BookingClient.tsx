@@ -15,7 +15,6 @@ export default function BookingClient() {
   const pack = (searchParams.get("pack") || "") as PackageKey;
   const basePrice = Number(searchParams.get("basePrice") || "0");
   const finalPrice = Number(searchParams.get("finalPrice") || "0");
-  const offerActive = searchParams.get("offerActive") === "1";
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -86,7 +85,7 @@ export default function BookingClient() {
         packageLabel,
         basePrice,
         finalPrice,
-        offerApplied: offerActive,
+        offerApplied: false,
 
         fullName: fullName.trim(),
         phone: phone.trim(),
@@ -146,11 +145,6 @@ export default function BookingClient() {
               <div className="text-4xl font-semibold text-white">
                 ₹{finalPrice}
               </div>
-              {offerActive && (
-                <div className="text-xs text-white/40 mt-1">
-                  Offer applied (original ₹{basePrice})
-                </div>
-              )}
             </div>
             <div className="text-sm text-white/40">
               Editing included
