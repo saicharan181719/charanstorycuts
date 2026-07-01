@@ -87,7 +87,7 @@ export default function HomePage() {
           transition={{ delay: 0.35 }}
           className="mt-3 text-white/70 max-w-xl text-sm italic"
         >
-          ⚡Limited time Offer - Book now and save big!⚡
+          ⚡Every machine has a story. Let us bring yours to life.⚡
         </motion.p>
       </section>
 
