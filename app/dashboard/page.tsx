@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ClientDashboard from "./ClientDashboard";
-import AdminView from "../admin/page"; // 👈 reuse existing admin page
+import AdminView from "../charanstorycutsonlyopenadmin/page"; // 👈 reuse existing admin page
 
 export default function DashboardPage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);

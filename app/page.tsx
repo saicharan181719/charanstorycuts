@@ -80,7 +80,7 @@ export default function HomePage() {
           </span>
         </motion.button>
 
-        {/* Limited Offer Text */}
+        {/* Storytelling Text */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
